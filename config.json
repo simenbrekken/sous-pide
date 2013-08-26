@@ -1,0 +1,14 @@
+{
+    "defaultTemperature": 55,
+    "pins": {
+        "lcd": 4,
+        "buttonMinus": 6,
+        "buttonPlus": 7,
+        "relay": 9
+    },
+    "pid": {
+        "p": 875,
+        "i": 0.5,
+        "d": 0.1
+    }
+}
