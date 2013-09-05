@@ -1,0 +1,164 @@
+/*
+Deep Purple 462446
+Purple 673653
+Tangerine b05f6d
+Peach de8275
+Skin ffab89
+Pomegranate eb6b56
+Yellow ffc153
+Mint 47b39d
+*/
+
+body {
+    background-color: #462446;
+    color: #ece6dd;
+}
+
+.block {
+    position: relative;
+    overflow: hidden;
+    margin: 0.5em;
+    border-radius: 0.5em;
+}
+
+.celsius:after {
+    content: "°";
+}
+
+.button {
+    position: relative;
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-content: center;
+    line-height: 1;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -webkit-transition: all 0.15s ease-in-out;
+}
+
+.no-touch .button:hover {
+    color: rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.button.active {
+    color: rgba(255, 255, 255, 0.6);
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.stepper {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.stepper .button {
+    font-size: 8em;
+    font-weight: 100;
+    color: transparent;
+}
+
+.stepper .button.active {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.stepper.vertical {
+    flex-flow: column;
+}
+
+.stepper.horizontal .button {
+    flex: 1;
+    font-size: 5em;
+}
+
+.reading {
+    padding: 1em;
+}
+
+.reading .label {
+    padding-left: 0;
+    font-size: 0.7em;
+    font-weight: 500;
+    color: #ece6dd;
+    text-transform: uppercase;
+}
+
+.reading .label .glyphicon {
+    -webkit-font-smoothing: subpixel-antialiased;
+}
+
+.reading .value {
+    line-height: 0.85;
+    font-weight: 100;
+    letter-spacing: -0.035em
+}
+
+.current {
+    height: 50%;
+}
+
+.current .value {
+    font-size: 7em;
+    line-height: 0.75;
+}
+
+.current .value {
+    font-size: 7em;
+}
+
+.target .value {
+    font-size: 4em;
+}
+
+.temperature {
+    height: 20em;
+    background-color: #47b39d;
+}
+
+.pid {
+    display: flex;
+    flex-flow: row;
+}
+
+.pid .block {
+    flex: 1;
+    background-color: #eb6b56;
+}
+
+.pid .reading .value {
+    font-size: 3em;
+}
+
+.timer {
+    display: flex;
+    flex-flow: row;
+    background-color: #673653;
+}
+
+.timer .reading .value {
+    font-size: 3em;
+}
+
+.timer .hours,
+.timer .minutes {
+    position: relative;
+    flex: 1;
+}
+
+.timer .toggle {
+    flex: 2;
+    align-items: center;
+    font-size: 2.25em;
+}
+
+.timer .toggle:hover {
+    color: #ece6dd;
+}
+
+.timer .toggle .glyphicon {
+    top: 0;
+}
