@@ -1,12 +1,14 @@
 /*
-Deep Purple 462446
-Purple 673653
-Tangerine b05f6d
-Peach de8275
-Skin ffab89
-Pomegranate eb6b56
-Yellow ffc153
-Mint 47b39d
+    Palette:
+
+    Deep Purple: #462446
+    Purplee: #673653
+    Tangerinee: b05f6d
+    Peach: #de8275
+    Skin: #ffab89
+    Pomegranate: #eb6b56
+    Yellow: #ffc153
+    Mint: #47b39d
 */
 
 body {
@@ -150,7 +152,7 @@ body {
 }
 
 .timer .toggle {
-    flex: 2;
+    flex: 1;
     align-items: center;
     font-size: 2.25em;
 }
@@ -161,4 +163,8 @@ body {
 
 .timer .toggle .glyphicon {
     top: 0;
+}
+
+.timer.active .toggle {
+    color: #ffc153;
 }

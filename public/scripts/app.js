@@ -9,7 +9,7 @@
     // Detect touch
     $('html').toggleClass('no-touch', !('ontouchstart' in document.documentElement));
 
-    // Values
+    // Bound value
     $('.value[data-path]').each(function() {
         var $value = $(this)
 
@@ -24,19 +24,11 @@
         })
     })
 
-    // Steppers
-    $('.stepper[data-path]').each(function() {
+    // Stepper
+    $('.stepper').each(function() {
         var $stepper = $(this)
 
-        var path = $stepper.attr('data-path'),
-            step = +$stepper.attr('data-step') || 1,
-            node = device.child(path),
-            value = 0
-
-        node.once('value', function(snapshot) {
-            value = +snapshot.val() || 0
-        })
-
+        var step = +$stepper.attr('data-step') || 1
         $stepper.on('mousedown touchstart', '.button', function(e) {
             e.preventDefault()
 
@@ -47,9 +39,9 @@
                 timer
 
             function adjust() {
-                value += step * direction
+                var value = (+$stepper.attr('data-value') || 0) + (step * direction)
 
-                node.set(value)
+                $stepper.attr('data-value', value).trigger('change', value)
             }
 
             function delay(amount) {
@@ -76,6 +68,52 @@
             })
 
             delay(500)
+        })
+    })
+
+    // Bound stepper
+    $('.stepper[data-path]').each(function() {
+        var $stepper = $(this)
+
+        var path = $stepper.attr('data-path'),
+            node = device.child(path)
+
+        node.on('value', function(snapshot) {
+            $stepper.attr('data-value', snapshot.val() || 0)
+        })
+
+        $stepper.on('change', function(e, value) {
+            node.set(value)
+        })
+    })
+
+    // Timer
+    $('.timer').each(function() {
+        var $timer = $(this),
+            $hours = $timer.find('.hours .value'),
+            $minutes = $timer.find('.minutes .value')
+
+        var path = $timer.attr('data-path'),
+            node = device.child(path)
+
+        node.child('duration').on('value', function(snapshot) {
+            var seconds = snapshot.val() || 0,
+                hours = Math.floor(seconds / 3600),
+                minutes = Math.floor(seconds % 3600 / 60)
+
+            $hours.text(sprintf('%02d', hours))
+            $minutes.text(sprintf('%02d', minutes))
+        })
+
+        node.child('start').on('value', function(snapshot) {
+            $timer.toggleClass('active', !!snapshot.val())
+        })
+
+        $timer.find('.toggle').on('click', function() {
+            var start = node.child('start')
+            start.once('value', function(snapshot) {
+                start.set(snapshot.val() ? null : Date.now())
+            })
         })
     })
 }())

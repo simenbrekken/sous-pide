@@ -16,7 +16,7 @@
                     Current temperature
                     <span class="glyphicon glyphicon-arrow-up"></span>
                 </div>
-                <div class="celsius value" data-path="values/temperature">0</div>
+                <div class="celsius value" data-path="sensors/temperature">0</div>
             </div>
 
             <div class="target reading">
@@ -68,14 +68,14 @@
             </div>
         </div>
 
-        <div class="timer block">
+        <div class="timer block" data-path="timer">
             <div class="hours">
                 <div class="reading">
                     <div class="label">Hours</div>
-                    <div class="value" data-path="timer/hours" data-format="%02d">00</div>
+                    <div class="value">00</div>
                 </div>
 
-                <div class="horizontal stepper" data-path="timer/hours" data-step="1">
+                <div class="horizontal stepper" data-path="timer/duration" data-step="3600">
                     <div class="minus button">–</div>
                     <div class="plus button">+</div>
                 </div>
@@ -84,16 +84,16 @@
             <div class="minutes">
                 <div class="reading">
                     <div class="label">Minutes</div>
-                    <div class="value" data-path="timer/minutes" data-format="%02d">00</div>
+                    <div class="value">00</div>
                 </div>
 
-                <div class="horizontal stepper" data-path="timer/minutes" data-step="1">
+                <div class="horizontal stepper" data-path="timer/duration" data-step="60">
                     <div class="minus button">–</div>
                     <div class="plus button">+</div>
                 </div>
             </div>
 
-            <div class="toggle button" data-path="timer/active">
+            <div class="toggle button">
                 <span class="start glyphicon glyphicon-off"></span>
                 <span class="stop glyphicon glyphicon"></span>
             </div>
