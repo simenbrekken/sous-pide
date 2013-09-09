@@ -1,63 +1,34 @@
-// const RELAY_WINDOW = 5000 // Milliseconds of potential "on time"
+// Adapted from https://github.com/br3ttb/Arduino-PID-Library
+pid <- {
+    p = 857 // Proportiona
+    i = 0.5 // Integral
+    d = 0.1 // Derivative
 
-class PID {
-    constructor() {
+    target = 0 // Target temperature
+    min = 0 // Minimum output value
+    max = 100 // Maximum output value
+    sampleTime = 1 // Time between samples (calls to compute) in seconds
 
-    }
-}
+    lastInput = 0
+    errorSum = 0
 
-// local outputTemperature = OutputPort("temperature")
-// local inputTarget
+    function compute(input) {
+        local error = target - input
+        local diff = input - lastInput
 
-/*
-local input // Temperature from sensor
-local target = 55 // Desired temperature
-local output // How long in milliseconds to switch relay on
+        lastInput = input
+        errorSum = limit(errorSum + (i * sampleTime * error))
 
-local kP = 875 // Proportional
-local kI = 0.5 // Integral
-local kD = 0.1 // Derivative
-*/
-
-// local temperature = OutputPort("temperature")
-// local target = OutputPort("target")
-
-/*
-class TemperatureSensor extends OutputPort {
-
-}
-
-class PID extends InputPort {
-
-}
-*/
-
-/*
-class Relay extends InputPort {
-    type = "number"
-    pin = null
-
-    constructor(name, pin) {
-        base.constructor(name)
-
-        this.pin = pin
+        return limit((p * error)  + errorSum + ((d / sampleTime) * diff))
     }
 
-    function set(value) {
-        this.pin.write(value)
+    function limit(value) {
+        if (value < min) {
+            return min
+        } else if (value > max) {
+            return max
+        }
+
+        return value
     }
 }
-
-
-function updateRelay() {
-    imp.wakeup(20, updateRelay)
-}
-*/
-
-/*
-local onTime = 0
-local windowSta
-
-print(SAMPLE_TIME)
-print(onTime)
-*/
