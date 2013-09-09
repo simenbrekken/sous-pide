@@ -24,7 +24,7 @@ body {
 }
 
 .celsius:after {
-    content: "°";
+    content: "\00b0";
 }
 
 .button {
