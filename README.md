@@ -1,13 +1,6 @@
 ### Requirements
-* [gpio-admin](https://github.com/quick2wire/quick2wire-gpio-admin)
-
-### Installation
-
-* `sudo adduser $USER gpio`
-* `sudo modprobe w1-gpio`
-* `sudo modprobe w1-therm`
-
-Log out and back in again.
+* [Electric Imp](http://electricimp.com)
+* [DS18B20 Temperature Sensor](https://www.sparkfun.com/products/11050)
 
 ### Tuning
 
