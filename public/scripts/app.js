@@ -1,78 +1,54 @@
-/* global sprintf: false */
+/* global Firebase: false, sprintf: false */
 
 (function() {
     var $document = $(document)
 
-    var agentUrl = 'https://agent.electricimp.com/zOU4EXiahz2t',
-        resumeTimer,
-        updateTimer
+    var firebase = new Firebase('https://sous-pide.firebaseio.com'),
+        device = firebase.child('devices/simen')
 
-    function pauseUpdates() {
-        console.log('Pausing updates')
-        clearTimeout(updateTimer)
-        clearTimeout(resumeTimer)
+    var notifyAgent = (function() {
+        var promise
 
-        updateTimer = null
-        resumeTimer = null
-    }
+        return function() {
+            if (!promise) {
+                promise = $.Deferred()
 
-    function resumeUpdates() {
-        clearTimeout(updateTimer)
-        clearTimeout(resumeTimer)
+                device.child('configuration/agent').once('value', function(snapshot) {
+                    promise.resolve('https://agent.electricimp.com/' + snapshot.val() + '/update')
+                })
+            }
 
-        resumeTimer = setTimeout(function() {
-            console.log('Resuming updates')
-
-            updateTimer = setInterval(load() || load, 1000)
-        }, 750)
-    }
-
-    function update(data) {
-        if (updateTimer) {
-            console.log('Updating')
-
-            $('[data-path]').each(function() {
-                var $el = $(this)
-
-                var segments = $el.attr('data-path').split('/'),
-                    value = data[segments[0]][segments[1]]
-
-                if ($el.hasClass('value')) {
-                    $el.text(sprintf($el.attr('data-format') || '%.1f', value))
-                } else if ($el.hasClass('stepper')) {
-                    $el.attr('data-value', value || 0)
-                }
+            promise.done(function(url) {
+                console.log('Polling url:', url)
             })
+
+            return promise.done(_.throttle($.get, 500))
         }
-    }
+    }())
 
-    // Load configuration from agent
-    function load() {
-        console.log('Loading')
-        $.get(agentUrl).done(update)
-    }
+    // Detect touch
+    $('html').toggleClass('no-touch', !('ontouchstart' in document.documentElement))
 
-    // Save configuration to agent (maximum once every 750ms)
-    var save = _.throttle(function() {
-        var config = {}
+    // Bound value
+    $('.value[data-path]').each(function() {
+        var $value = $(this)
 
-        $('[data-path^="config/"]').each(function() {
-            var $el = $(this)
+        var path = $value.attr('data-path'),
+            format = $value.attr('data-format') || '%.1f',
+            node = device.child(path)
 
-            var segments = $el.attr('data-path').split('/')
+        node.on('value', function(snapshot) {
+            var value = +snapshot.val()
 
-            config[segments[1]] = $el.attr('data-value')
+            $value.text(sprintf(format, value))
         })
-
-        $.post(agentUrl, config)
-    }, 750)
+    })
 
     // Stepper
     $('.stepper').each(function() {
         var $stepper = $(this)
 
         var step = +$stepper.attr('data-step') || 1
-
         $stepper.on('mousedown touchstart', '.button', function(e) {
             e.preventDefault()
 
@@ -80,7 +56,7 @@
 
             var startTime = Date.now(),
                 direction = $button.hasClass('plus') ? 1 : -1,
-                holdTimer
+                timer
 
             function adjust() {
                 var value = (+$stepper.attr('data-value') || 0) + (step * direction)
@@ -89,9 +65,9 @@
             }
 
             function delay(amount) {
-                clearTimeout(holdTimer)
+                clearTimeout(timer)
 
-                holdTimer = setTimeout(function() {
+                timer = setTimeout(function() {
                     adjust()
                     delay(Math.max(100, amount * 0.75))
                 }, amount)
@@ -104,29 +80,35 @@
 
                 $button.removeClass('active')
 
+                clearTimeout(timer)
+
                 if (Date.now() - startTime  < 250) {
                     adjust()
                 }
-
-                clearTimeout(holdTimer)
-                resumeUpdates()
             })
 
-            pauseUpdates()
             delay(500)
         })
     })
 
-    // Configuration stepper
-    $('.stepper[data-path]').on('change', function(e, value) {
-        var $value = $('.value[data-path="' + $(this).attr('data-path') + '"]')
-        $value.text(sprintf($value.attr('data-format') || '%.1f', value))
+    // Bound stepper
+    $('.stepper[data-path]').each(function() {
+        var $stepper = $(this)
 
-        save()
+        var path = $stepper.attr('data-path'),
+            node = device.child(path)
+
+        node.on('value', function(snapshot) {
+            $stepper.attr('data-value', snapshot.val() || 0)
+        })
+
+        $stepper.on('change', function(e, value) {
+            node.set(value)
+            notifyAgent()
+        })
     })
 
     // Timer
-    /*
     $('.timer').each(function() {
         var $timer = $(this),
             $hours = $timer.find('.hours .value'),
@@ -152,14 +134,8 @@
             var start = node.child('start')
             start.once('value', function(snapshot) {
                 start.set(snapshot.val() ? null : Date.now())
+                notifyAgent()
             })
         })
     })
-    */
-
-    // Detect touch
-    $('html').toggleClass('no-touch', !('ontouchstart' in document.documentElement))
-
-    load()
-    resumeUpdates()
 }())

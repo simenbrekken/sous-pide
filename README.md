@@ -1,6 +1,7 @@
 ### Requirements
 * [Electric Imp](http://electricimp.com)
 * [DS18B20 Temperature Sensor](https://www.sparkfun.com/products/11050)
+* [Firebase](http://firebase.com)
 
 ### Tuning
 

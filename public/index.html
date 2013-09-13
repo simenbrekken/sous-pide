@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -21,10 +22,10 @@
 
             <div class="target reading">
                 <div class="label">Target temperature</div>
-                <div class="celsius value" data-path="config/target">0</div>
+                <div class="celsius value" data-path="configuration/target">0</div>
             </div>
 
-            <div class="vertical stepper" data-path="config/target" data-step="0.5">
+            <div class="vertical stepper" data-path="configuration/target" data-step="0.5">
                 <div class="plus button">+</div>
                 <div class="minus button">–</div>
             </div>
@@ -34,10 +35,10 @@
             <div class="block pid-p">
                 <div class="reading">
                     <div class="label">Proportional</div>
-                    <div class="value" data-path="config/p" data-format="%d">0</div>
+                    <div class="value" data-path="configuration/pid/p" data-format="%d">0</div>
                 </div>
 
-                <div class="horizontal stepper" data-path="config/p" data-step="5">
+                <div class="horizontal stepper" data-path="configuration/pid/p" data-step="5">
                     <div class="minus button">–</div>
                     <div class="plus button">+</div>
                 </div>
@@ -46,10 +47,10 @@
             <div class="block pid-i">
                 <div class="reading">
                     <div class="label">Integral</div>
-                    <div class="value" data-path="config/i">0</div>
+                    <div class="value" data-path="configuration/pid/i">0</div>
                 </div>
 
-                <div class="horizontal stepper" data-path="config/i" data-step="0.1">
+                <div class="horizontal stepper" data-path="configuration/pid/i" data-step="0.1">
                     <div class="minus button">–</div>
                     <div class="plus button">+</div>
                 </div>
@@ -58,24 +59,24 @@
             <div class="block pid-d">
                 <div class="reading">
                     <div class="label">Derivative</div>
-                    <div class="value" data-path="config/d">0</div>
+                    <div class="value" data-path="configuration/pid/d">0</div>
                 </div>
 
-                <div class="horizontal stepper" data-path="config/d" data-step="0.1">
+                <div class="horizontal stepper" data-path="configuration/pid/d" data-step="0.1">
                     <div class="minus button">–</div>
                     <div class="plus button">+</div>
                 </div>
             </div>
         </div>
 
-        <div class="timer block">
+        <div class="timer block" data-path="timer">
             <div class="hours">
                 <div class="reading">
                     <div class="label">Hours</div>
                     <div class="value">00</div>
                 </div>
 
-                <div class="horizontal stepper" data-step="3600">
+                <div class="horizontal stepper" data-path="timer/duration" data-step="3600">
                     <div class="minus button">–</div>
                     <div class="plus button">+</div>
                 </div>
@@ -87,7 +88,7 @@
                     <div class="value">00</div>
                 </div>
 
-                <div class="horizontal stepper" data-step="60">
+                <div class="horizontal stepper" data-path="timer/duration" data-step="60">
                     <div class="minus button">–</div>
                     <div class="plus button">+</div>
                 </div>
@@ -99,6 +100,7 @@
             </div>
         </div>
 
+        <script src="https://cdn.firebase.com/v0/firebase.js"></script>
         <script src="scripts/jquery-2.0.3.min.js"></script>
         <script src="scripts/lodash-1.3.1.min.js"></script>
         <script src="scripts/sprintf-0.0.7.min.js"></script>

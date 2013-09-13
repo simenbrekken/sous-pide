@@ -1,28 +1,48 @@
-config <- server.load()
-values <- {}
+class Firebase {
+    url = null
+    headers = {
+        "Content-Type": "application/json"
+    }
 
-configure <- function() {
-    server.save(config)
-    device.send("configure", config)
+    constructor(url) {
+        this.url = url
+    }
+
+    function read(callback) {
+        http.get(url + ".json", headers).sendasync(function(res) {
+            callback(http.jsondecode(res.body))
+        })
+    }
+
+    function update(values, callback = null) {
+        http.request("PATCH", url + ".json", headers, http.jsonencode(values)).sendasync(function(res) {
+            if (callback) {
+                callback(http.jsondecode(res.body))
+            }
+        })
+    }
+
+    function child(path) {
+        return Firebase(url + "/" + path)
+    }
 }
 
+local firebase = Firebase("https://sous-pide.firebaseio.com/devices/simen")
+local configuration = firebase.child("configuration")
+local values = firebase.child("values")
+
 device.on("update", function(data) {
-    values = data
+    values.update(data)
 })
 
 http.onrequest(function(req, res) {
-    if (req.method == "POST") {
-        foreach (name, value in http.urldecode(req.body)) {
-            config[name] <- value.tofloat()
-        }
-
-        configure()
-    }
-
     res.header("Access-Control-Allow-Origin", "*")
     res.header("Content-Type", "application/json")
-    res.send(200, http.jsonencode({
-        config = config
-        values = values
-    }))
+
+    if (req.path == "/update") {
+        configuration.read(function(values) {
+            device.send("configure", values)
+            res.send(200, "OK")
+        })
+    }
 })

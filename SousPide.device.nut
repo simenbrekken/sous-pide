@@ -160,17 +160,17 @@ updateRelay <- function() {
     imp.wakeup(0.01, updateRelay)
 }
 
-configure <- function(config) {
-    server.log(format("Configuring, target: %.1f, p: %d, i: %.1f, d: %.1f", config.target, config.p, config.i, config.d))
+updateConfiguration <- function(values) {
+    server.log(format("Configuring, target: %.1f, p: %d, i: %.1f, d: %.1f", values.target, values.pid.p, values.pid.i, values.pid.d))
 
-    pid.p = config.p
-    pid.i = config.i
-    pid.d = config.d
-    pid.target = config.target
+    pid.p = values.pid.p
+    pid.i = values.pid.i
+    pid.d = values.pid.d
+    pid.target = values.target
 }
 
 imp.configure("Sous Pide", [], [])
-agent.on("configure", configure)
+agent.on("configure", updateConfiguration)
 
 oneWire.reset() // Make sure 1-Wire is ready
 pid.max = windowSize // Scale PID output to our TPO window
