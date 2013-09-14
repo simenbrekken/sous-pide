@@ -12,17 +12,18 @@
     </head>
     <body>
         <div class="block temperature">
-            <div class="current reading">
+            <div class="current reading" data-path="values/temperature">
                 <div class="label">
                     Current temperature
-                    <span class="glyphicon glyphicon-arrow-up"></span>
+                    <span class="rising glyphicon glyphicon-arrow-up"></span>
+                    <span class="falling glyphicon glyphicon-arrow-down"></span>
                 </div>
-                <div class="celsius value" data-path="values/temperature">0</div>
+                <div class="celsius value">0</div>
             </div>
 
-            <div class="target reading">
+            <div class="target reading" data-path="configuration/target">
                 <div class="label">Target temperature</div>
-                <div class="celsius value" data-path="configuration/target">0</div>
+                <div class="celsius value">0</div>
             </div>
 
             <div class="vertical stepper" data-path="configuration/target" data-step="0.5">
@@ -33,9 +34,9 @@
 
         <div class="pid">
             <div class="block pid-p">
-                <div class="reading">
+                <div class="reading" data-path="configuration/pid/p">
                     <div class="label">Proportional</div>
-                    <div class="value" data-path="configuration/pid/p" data-format="%d">0</div>
+                    <div class="value" data-format="%d">0</div>
                 </div>
 
                 <div class="horizontal stepper" data-path="configuration/pid/p" data-step="5">
@@ -45,9 +46,9 @@
             </div>
 
             <div class="block pid-i">
-                <div class="reading">
+                <div class="reading" data-path="configuration/pid/i">
                     <div class="label">Integral</div>
-                    <div class="value" data-path="configuration/pid/i">0</div>
+                    <div class="value">0</div>
                 </div>
 
                 <div class="horizontal stepper" data-path="configuration/pid/i" data-step="0.1">
@@ -57,9 +58,9 @@
             </div>
 
             <div class="block pid-d">
-                <div class="reading">
+                <div class="reading" data-path="configuration/pid/d">
                     <div class="label">Derivative</div>
-                    <div class="value" data-path="configuration/pid/d">0</div>
+                    <div class="value">0</div>
                 </div>
 
                 <div class="horizontal stepper" data-path="configuration/pid/d" data-step="0.1">
@@ -70,6 +71,8 @@
         </div>
 
         <div class="timer block" data-path="timer">
+            <audio class="alarm-sound" src="sounds/alarm.ogg" loop></audio>
+
             <div class="hours">
                 <div class="reading">
                     <div class="label">Hours</div>
@@ -95,8 +98,9 @@
             </div>
 
             <div class="toggle button">
-                <span class="start glyphicon glyphicon-off"></span>
-                <span class="stop glyphicon glyphicon"></span>
+                <span class="start glyphicon glyphicon-time"></span>
+                <span class="stop glyphicon glyphicon-ban-circle"></span>
+                <span class="expired glyphicon glyphicon-bell"></span>
             </div>
         </div>
 
