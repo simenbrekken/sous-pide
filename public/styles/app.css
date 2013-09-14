@@ -187,3 +187,34 @@ body {
     display: none;
 }
 
+@media (min-width: 30em) {
+    .stepper.horizontal .button {
+        font-size: 5.5em;
+    }
+
+    .target .value {
+        font-size: 5em;
+    }
+
+    .pid .reading .value,
+    .timer .reading .value {
+        font-size: 4em;
+    }
+}
+
+@media (min-width: 40em) {
+    .stepper.horizontal .button {
+        font-size: 7em;
+    }
+
+    .target .value {
+        font-size: 7em;
+    }
+
+    .pid .reading .value,
+    .timer .reading .value {
+        font-size: 6em;
+    }
+}
+
+
